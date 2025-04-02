@@ -1,4 +1,5 @@
 import { useState, useEffect } from "react";
+import { useNavigate } from "react-router-dom"; // Importamos useNavigate
 import { createBus } from "../services/busService";
 import { getMarcas } from "../services/marcaService";
 import { Bus } from "../interfaces/bus";
@@ -14,6 +15,7 @@ const AddBus = () => {
   });
 
   const [marcas, setMarcas] = useState<Marca[]>([]);
+  const navigate = useNavigate(); // Definimos navigate
 
   useEffect(() => {
     getMarcas().then(setMarcas);
@@ -27,6 +29,11 @@ const AddBus = () => {
     e.preventDefault();
     await createBus(bus);
     alert("Bus agregado!");
+    navigate("/buses"); // Redirigir a /buses después de agregar el bus
+  };
+
+  const handleCancel = () => {
+    navigate("/buses"); // Redirigir a /buses sin guardar
   };
 
   return (
@@ -90,7 +97,10 @@ const AddBus = () => {
           </select>
         </div>
 
-        <button type="submit" className="btn btn-primary">Agregar</button>
+        <div className="d-flex justify-content-between">
+          <button type="submit" className="btn btn-primary">Agregar</button>
+          <button type="button" className="btn btn-secondary" onClick={handleCancel}>Cancelar</button>
+        </div>
       </form>
     </div>
   );

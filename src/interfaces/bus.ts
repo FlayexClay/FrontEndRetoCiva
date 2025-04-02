@@ -4,6 +4,7 @@ export interface Bus {
     placa: string;
     caracteristicas: string;
     marcaId: number;
+    marcaNombre?: string;
     activo: boolean;
   }
   

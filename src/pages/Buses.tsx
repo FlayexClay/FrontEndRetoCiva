@@ -1,4 +1,5 @@
 import { useEffect, useState } from "react";
+import { useNavigate } from "react-router-dom";
 import { getBuses } from "../services/busService";
 import { Bus } from "../interfaces/bus";
 
@@ -6,6 +7,7 @@ const Buses = () => {
   const [buses, setBuses] = useState<Bus[]>([]);
   const [currentPage, setCurrentPage] = useState(0);
   const [totalPages, setTotalPages] = useState(1);
+  const navigate = useNavigate();
 
   useEffect(() => {
     getBuses(currentPage, 10).then(({ buses, totalPages }) => {
@@ -29,8 +31,10 @@ const Buses = () => {
                   <th>ID</th>
                   <th>Número</th>
                   <th>Placa</th>
+                  <th>Marca</th>
                   <th>Características</th>
                   <th>Activo</th>
+                  <th>Acciones</th>
                 </tr>
               </thead>
               <tbody>
@@ -39,11 +43,20 @@ const Buses = () => {
                     <td>{bus.id}</td>
                     <td>{bus.numeroBus}</td>
                     <td>{bus.placa}</td>
+                    <td>{bus.marcaNombre}</td>
                     <td>{bus.caracteristicas}</td>
                     <td>
                       <span className={`badge ${bus.activo ? "bg-success" : "bg-danger"}`}>
                         {bus.activo ? "Sí" : "No"}
                       </span>
+                    </td>
+                    <td>
+                      <button
+                        className="btn btn-warning btn-sm"
+                        onClick={() => navigate(`/editar-bus/${bus.id}`)}
+                      >
+                        Editar
+                      </button>
                     </td>
                   </tr>
                 ))}
@@ -76,3 +89,4 @@ const Buses = () => {
 };
 
 export default Buses;
+

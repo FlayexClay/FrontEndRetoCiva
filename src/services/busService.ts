@@ -73,3 +73,63 @@ export const createBus = async (bus: Bus) => {
     return null;
   }
 };
+
+export const getBusById = async (id: number) => {
+  try {
+    const token = getToken();
+    if (!token) {
+      handleAuthError();
+      return null;
+    }
+
+    const response = await fetch(`${API_URL}/${id}`, {
+      headers: {
+        "Authorization": `Bearer ${token}`,
+        "Content-Type": "application/json",
+      },
+    });
+
+    if (response.status === 401) {
+      handleAuthError();
+      return null;
+    }
+
+    if (!response.ok) {
+      throw new Error(`Error HTTP: ${response.status}`);
+    }
+
+    return await response.json();
+  } catch (error) {
+    console.error("Error al obtener bus por ID:", error);
+    return null;
+  }
+};
+
+export const updateBus = async (id: number, bus: Bus) => {
+  try {
+    const token = getToken();
+    if (!token) {
+      handleAuthError();
+      return null;
+    }
+
+    const response = await fetch(`${API_URL}/${id}`, {
+      method: "PUT",
+      headers: {
+        "Authorization": `Bearer ${token}`,
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(bus),
+    });
+
+    if (response.status === 401) {
+      handleAuthError();
+      return null;
+    }
+
+    return await response.json();
+  } catch (error) {
+    console.error("Error al actualizar bus:", error);
+    return null;
+  }
+};
